@@ -1,0 +1,83 @@
+//    public static void main(String... args) {
+//        Session session = null;
+//        Transaction tx = null;
+//        UsersEntity user = null;
+//        try {
+//            session = HibernateUtil.getSession();
+//            tx = session.beginTransaction();
+//            user = (UsersEntity) session.get(UsersEntity.class, "bambalooon");
+//            if(user!=null) {
+//                System.out.println(user.getUsername());
+//                System.out.println(user.getRoles());
+//            }
+//            tx.commit();
+//        } catch (HibernateException | ExceptionInInitializerError e) {
+//            if(tx!=null) tx.rollback();
+//        } finally {
+//            if(session!=null) session.close();
+//        }
+//    }
+
+
+<property name="connection.url">jdbc:postgresql://localhost:5432/broker</property>
+    <property name="connection.driver_class">org.postgresql.Driver</property>
+    <property name="connection.username">broker</property>
+    <property name="connection.password">broker</property>
+
+    <property name="hibernate.connection.datasource">java:jboss/datasources/brokerDS</property>
+
+
+<dependency>
+            <groupId>org.hibernate.javax.persistence</groupId>
+            <artifactId>hibernate-jpa-2.1-api</artifactId>
+            <version>${hibernate-jpa.version}</version>
+        </dependency>
+
+<dependency>
+            <groupId>javassist</groupId>
+            <artifactId>javassist</artifactId>
+            <version>${javassist.version}</version>
+        </dependency>
+
+        <dependency>
+                    <groupId>javax</groupId>
+                    <artifactId>javaee-api</artifactId>
+                    <version>${javaee.version}</version>
+                </dependency>
+
+<dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-validator</artifactId>
+            <version>${hibernate-validator.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-entitymanager</artifactId>
+            <version>${hibernate.version}</version>
+            <scope>provided</scope>
+        </dependency>
+
+<plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-resources-plugin</artifactId>
+                <version>${maven-resources.version}</version>
+                <executions>
+                    <execution>
+                        <id>copy-resources</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>copy-resources</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${basedir}/target/META-INF</outputDirectory>
+                            <resources>
+                                <resource>
+                                    <directory></directory>
+                                </resource>
+                            </resources>
+                        </configuration>
+
+                    </execution>
+                </executions>
+            </plugin>
