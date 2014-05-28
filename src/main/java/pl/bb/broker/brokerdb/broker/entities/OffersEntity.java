@@ -5,6 +5,8 @@ import org.hibernate.annotations.FetchMode;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Collection;
 
@@ -17,9 +19,12 @@ import java.util.Collection;
  */
 @javax.persistence.Table(name = "offers", schema = "public", catalog = "broker")
 @Entity
-public class OffersEntity {
+public class OffersEntity implements Serializable {
     private int id;
+    @NotNull
+    @Size(min = 1, max = 400)
     private String description;
+    @NotNull
     private byte[] image;
     private CompaniesEntity company;
 

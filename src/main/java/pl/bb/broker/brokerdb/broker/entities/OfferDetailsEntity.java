@@ -1,7 +1,10 @@
 package pl.bb.broker.brokerdb.broker.entities;
 
 import javax.persistence.*;
+import javax.validation.constraints.DecimalMin;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.math.BigDecimal;
 
@@ -14,7 +17,7 @@ import java.math.BigDecimal;
  */
 @javax.persistence.Table(name = "offerdetails", schema = "public", catalog = "broker")
 @Entity
-public class OfferDetailsEntity {
+public class OfferDetailsEntity implements Serializable {
     @Embeddable
     public static class OfferDetailsPK implements Serializable {
         @NotNull
@@ -23,6 +26,7 @@ public class OfferDetailsEntity {
         protected OffersEntity offer;
 
         @NotNull
+        @Size(min = 1, max = 20)  //doesn't work?
         @javax.persistence.Column(name = "room", nullable = false, insertable = true, updatable = true, length = 20, precision = 0)
         @Basic
         protected String room;
@@ -63,6 +67,7 @@ public class OfferDetailsEntity {
     @EmbeddedId
     private OfferDetailsPK offerDetailsPK = new OfferDetailsPK();
     @NotNull
+    @DecimalMin(value = "0.00")
     private BigDecimal price;
 
     public OfferDetailsPK getOfferDetailsPK() {
@@ -77,7 +82,7 @@ public class OfferDetailsEntity {
         return offerDetailsPK.offer;
     }
 
-    public void setOffersEntity(OffersEntity offer) {
+    public void setOffer(OffersEntity offer) {
         this.offerDetailsPK.offer = offer;
     }
 
