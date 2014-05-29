@@ -10,6 +10,8 @@ import pl.bb.broker.brokerdb.broker.entities.UsersEntity;
 import pl.bb.broker.security.settings.SecurityGroups;
 
 import javax.persistence.EntityManager;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -19,8 +21,9 @@ import java.util.List;
  * Time: 19:19
  * To change this template use File | Settings | File Templates.
  */
-public enum BrokerDBUtil {
-    INSTANCE;
+public class BrokerDBUtil implements BrokerDBOfferUtil, BrokerDBAuthUtil {
+
+    protected BrokerDBUtil() {} //protected - only utils can use it.
 
     public void saveUser(UsersEntity user) throws HibernateException {
         Session session = null;
@@ -146,6 +149,28 @@ public enum BrokerDBUtil {
             }
         }
         return offer;
+    }
+
+    public List<OffersEntity> getOffers() throws HibernateException {
+        Session session = null;
+        Transaction tx = null;
+        List<OffersEntity> offers = null;
+        try {
+            session = HibernateUtil.getSession();
+            tx = session.beginTransaction();
+            offers = session.createQuery("FROM OffersEntity").list();
+            tx.commit();
+        } catch (HibernateException | ExceptionInInitializerError e) {
+            if(tx!=null) {
+                tx.rollback();
+            }
+            throw new HibernateException(e);
+        } finally {
+            if(session!=null) {
+                session.close();
+            }
+        }
+        return offers;
     }
 
     public boolean userExists(String username) throws HibernateException {

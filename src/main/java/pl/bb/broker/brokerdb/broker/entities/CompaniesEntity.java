@@ -2,6 +2,10 @@ package pl.bb.broker.brokerdb.broker.entities;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 import java.util.Collection;
 
 /**
@@ -11,6 +15,8 @@ import java.util.Collection;
  * Time: 18:00
  * To change this template use File | Settings | File Templates.
  */
+
+@XmlRootElement
 @javax.persistence.Table(name = "companies", schema = "public", catalog = "broker")
 @Entity
 public class CompaniesEntity {
@@ -22,6 +28,7 @@ public class CompaniesEntity {
     private String phone;
     private Collection<OffersEntity> offers;
 
+    @XmlAttribute
     @javax.persistence.Column(name = "id", nullable = false, insertable = true, updatable = false, length = 10, precision = 0)
     @Id
     @SequenceGenerator(name = "companies_id_seq", sequenceName = "companies_id_seq", allocationSize = 1)
@@ -35,6 +42,7 @@ public class CompaniesEntity {
     }
 
     //ignore null because there can be none company for specific username...
+    @XmlTransient //not nessesary
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "username")
     public UsersEntity getUser() {
@@ -45,6 +53,7 @@ public class CompaniesEntity {
         this.user = user;
     }
 
+    @XmlElement
     @javax.persistence.Column(name = "companyname", nullable = false, insertable = true, updatable = true, length = 40, precision = 0)
     @Basic
     public String getCompanyname() {
@@ -55,6 +64,7 @@ public class CompaniesEntity {
         this.companyname = companyname;
     }
 
+    @XmlElement
     @javax.persistence.Column(name = "address", nullable = true, insertable = true, updatable = true, length = 100, precision = 0)
     @Basic
     public String getAddress() {
@@ -65,6 +75,7 @@ public class CompaniesEntity {
         this.address = address;
     }
 
+    @XmlElement
     @javax.persistence.Column(name = "phone", nullable = true, insertable = true, updatable = true, length = 12, precision = 0)
     @Basic
     public String getPhone() {
@@ -75,6 +86,7 @@ public class CompaniesEntity {
         this.phone = phone;
     }
 
+    @XmlTransient //i don't want to :(
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "company")
     public Collection<OffersEntity> getOffers() {
         return offers;
@@ -108,5 +120,10 @@ public class CompaniesEntity {
         result = 31 * result + (address != null ? address.hashCode() : 0);
         result = 31 * result + (phone != null ? phone.hashCode() : 0);
         return result;
+    }
+
+    @Override
+    public String toString() {
+        return "Company[id="+id+"] name: "+companyname+"\n"+address+"\n"+phone+"\n";
     }
 }

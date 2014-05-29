@@ -2,6 +2,8 @@ package pl.bb.broker.brokerdb.broker.entities;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
 import java.io.Serializable;
 
 /**
@@ -11,6 +13,8 @@ import java.io.Serializable;
  * Time: 02:05
  * To change this template use File | Settings | File Templates.
  */
+
+@XmlRootElement
 @javax.persistence.Table(name = "roles", schema = "public", catalog = "broker")
 @Entity
 public class RolesEntity {
@@ -65,6 +69,7 @@ public class RolesEntity {
         this.rolePK = rolePK;
     }
 
+    @XmlElement
     public String getRole() {
         return rolePK.role;
     }
@@ -73,7 +78,7 @@ public class RolesEntity {
         this.rolePK.role = role;
     }
 
-
+    //No @XmlElement
     public UsersEntity getUser() {
         return rolePK.user;
     }

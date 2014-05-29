@@ -4,6 +4,7 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
+import javax.xml.bind.annotation.XmlElement;
 import java.util.ArrayList;
 import java.util.Collection;
 import pl.bb.broker.security.settings.SecuritySettings;
@@ -18,15 +19,19 @@ import pl.bb.broker.security.settings.SecuritySettings;
 @javax.persistence.Table(name = "users", schema = "public", catalog = "broker")
 @Entity
 public class UsersEntity {
+    @XmlElement
     @Size(min = SecuritySettings.USERNAME_MIN, max = SecuritySettings.USERNAME_MAX)
     @Pattern(regexp = SecuritySettings.USERNAME_PATTERN)
     @NotNull
     private String username;
 
+    @XmlElement
     @Size(min = SecuritySettings.PASSWORDHASH_LEN, max = SecuritySettings.PASSWORDHASH_LEN)
     @NotNull
     private String password;
+    @XmlElement
     private Collection<RolesEntity> roles;
+    //No XmlElement
     private Collection<CompaniesEntity> companiesEntities;
 
     @javax.persistence.Column(name = "username", nullable = false, insertable = true, updatable = true, length = 40, precision = 0)
@@ -49,7 +54,7 @@ public class UsersEntity {
         this.password = password;
     }
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "rolePK.user")
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "rolePK.user")
     public Collection<RolesEntity> getRoles() {
         return roles;
     }

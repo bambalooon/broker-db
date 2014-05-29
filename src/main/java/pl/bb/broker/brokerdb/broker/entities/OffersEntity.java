@@ -6,9 +6,15 @@ import org.hibernate.annotations.FetchMode;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Collection;
+import pl.bb.broker.brokerdb.broker.xml.ByteArrayAdapter;
 
 /**
  * Created with IntelliJ IDEA.
@@ -17,6 +23,8 @@ import java.util.Collection;
  * Time: 18:00
  * To change this template use File | Settings | File Templates.
  */
+
+@XmlRootElement(name = "offer")
 @javax.persistence.Table(name = "offers", schema = "public", catalog = "broker")
 @Entity
 public class OffersEntity implements Serializable {
@@ -26,10 +34,13 @@ public class OffersEntity implements Serializable {
     private String description;
     @NotNull
     private byte[] image;
+    @NotNull
+    @Size(min = 1, max = 40)
+    private String city;
     private CompaniesEntity company;
-
     private Collection<OfferDetailsEntity> details;
 
+    @XmlAttribute
     @javax.persistence.Column(name = "id", nullable = false, insertable = true, updatable = true, length = 10, precision = 0)
     @Id
     @SequenceGenerator(name = "offers_id_seq", sequenceName = "offers_id_seq", allocationSize = 1)
@@ -42,8 +53,9 @@ public class OffersEntity implements Serializable {
         this.id = id;
     }
 
+    @XmlElement
     @NotNull
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "company_id")
     public CompaniesEntity getCompany() {
         return company;
@@ -53,6 +65,7 @@ public class OffersEntity implements Serializable {
         this.company = company;
     }
 
+    @XmlElement
     @javax.persistence.Column(name = "description", nullable = true, insertable = true, updatable = true, length = 400, precision = 0)
     @Basic
     public String getDescription() {
@@ -63,6 +76,8 @@ public class OffersEntity implements Serializable {
         this.description = description;
     }
 
+    @XmlElement
+    @XmlJavaTypeAdapter(value = ByteArrayAdapter.class)
     @javax.persistence.Column(name = "image", nullable = true, insertable = true, updatable = true, length = 2147483647, precision = 0)
     @Fetch(FetchMode.JOIN)
     @Basic
@@ -74,7 +89,19 @@ public class OffersEntity implements Serializable {
         this.image = image;
     }
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "offerDetailsPK.offer")
+    @XmlElement
+    @javax.persistence.Column(name = "city", nullable = false, insertable = true, updatable = true, length = 40, precision = 0)
+    @Basic
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    @XmlElement(name = "detail")
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "offerDetailsPK.offer")
     public Collection<OfferDetailsEntity> getDetails() {
         return details;
     }
@@ -106,4 +133,14 @@ public class OffersEntity implements Serializable {
         result = 31 * result + (image != null ? Arrays.hashCode(image) : 0);
         return result;
     }
+
+    @Override
+    public String toString() {
+        String result = "offer[id="+id+"]\n"+description+"\n"+city+"\n"+company;
+        for(OfferDetailsEntity d : details) {
+            result += "detail: "+d.getRoom()+" - "+d.getPrice()+"\n";
+        }
+        return result;
+    }
+
 }

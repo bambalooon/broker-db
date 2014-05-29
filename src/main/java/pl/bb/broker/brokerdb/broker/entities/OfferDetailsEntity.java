@@ -5,6 +5,9 @@ import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 import java.io.Serializable;
 import java.math.BigDecimal;
 
@@ -15,18 +18,16 @@ import java.math.BigDecimal;
  * Time: 18:16
  * To change this template use File | Settings | File Templates.
  */
+@XmlRootElement
 @javax.persistence.Table(name = "offerdetails", schema = "public", catalog = "broker")
 @Entity
 public class OfferDetailsEntity implements Serializable {
     @Embeddable
     public static class OfferDetailsPK implements Serializable {
-        @NotNull
         @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
         @JoinColumn(name = "offer_id")
         protected OffersEntity offer;
 
-        @NotNull
-        @Size(min = 1, max = 20)  //doesn't work?
         @javax.persistence.Column(name = "room", nullable = false, insertable = true, updatable = true, length = 20, precision = 0)
         @Basic
         protected String room;
@@ -70,6 +71,7 @@ public class OfferDetailsEntity implements Serializable {
     @DecimalMin(value = "0.00")
     private BigDecimal price;
 
+    @XmlTransient
     public OfferDetailsPK getOfferDetailsPK() {
         return offerDetailsPK;
     }
@@ -78,6 +80,8 @@ public class OfferDetailsEntity implements Serializable {
         this.offerDetailsPK = offerDetailsPK;
     }
 
+    @XmlTransient
+    @NotNull
     public OffersEntity getOffer() {
         return offerDetailsPK.offer;
     }
@@ -86,6 +90,9 @@ public class OfferDetailsEntity implements Serializable {
         this.offerDetailsPK.offer = offer;
     }
 
+    @XmlElement
+    @NotNull
+    @Size(min = 1, max = 20)  //doesn't work?
     public String getRoom() {
         return offerDetailsPK.room;
     }
@@ -94,6 +101,7 @@ public class OfferDetailsEntity implements Serializable {
         this.offerDetailsPK.room = room;
     }
 
+    @XmlElement
     @javax.persistence.Column(name = "price", nullable = false, insertable = true, updatable = true, length = 7, precision = 2)
     @Basic
     public BigDecimal getPrice() {
