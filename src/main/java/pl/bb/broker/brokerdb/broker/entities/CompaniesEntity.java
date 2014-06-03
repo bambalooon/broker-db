@@ -16,7 +16,7 @@ import java.util.Collection;
  * To change this template use File | Settings | File Templates.
  */
 
-@XmlRootElement
+@XmlRootElement(name = "company")
 @javax.persistence.Table(name = "companies", schema = "public", catalog = "broker")
 @Entity
 public class CompaniesEntity {

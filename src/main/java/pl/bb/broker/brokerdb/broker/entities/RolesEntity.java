@@ -4,6 +4,7 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 import java.io.Serializable;
 
 /**
@@ -14,7 +15,7 @@ import java.io.Serializable;
  * To change this template use File | Settings | File Templates.
  */
 
-@XmlRootElement
+@XmlRootElement(name = "role")
 @javax.persistence.Table(name = "roles", schema = "public", catalog = "broker")
 @Entity
 public class RolesEntity {
@@ -25,7 +26,7 @@ public class RolesEntity {
         protected String role;
 
         @NotNull
-        @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+        @ManyToOne(fetch = FetchType.LAZY) //no cascade
         @JoinColumn(name = "username")
         protected UsersEntity user;
 
@@ -78,7 +79,7 @@ public class RolesEntity {
         this.rolePK.role = role;
     }
 
-    //No @XmlElement
+    @XmlTransient
     public UsersEntity getUser() {
         return rolePK.user;
     }

@@ -5,6 +5,8 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 import java.util.ArrayList;
 import java.util.Collection;
 import pl.bb.broker.security.settings.SecuritySettings;
@@ -16,25 +18,29 @@ import pl.bb.broker.security.settings.SecuritySettings;
  * Time: 02:05
  * To change this template use File | Settings | File Templates.
  */
+@XmlRootElement(name = "user")
 @javax.persistence.Table(name = "users", schema = "public", catalog = "broker")
 @Entity
 public class UsersEntity {
-    @XmlElement
     @Size(min = SecuritySettings.USERNAME_MIN, max = SecuritySettings.USERNAME_MAX)
     @Pattern(regexp = SecuritySettings.USERNAME_PATTERN)
     @NotNull
     private String username;
 
-    @XmlElement
     @Size(min = SecuritySettings.PASSWORDHASH_LEN, max = SecuritySettings.PASSWORDHASH_LEN)
     @NotNull
     private String password;
-    @XmlElement
+    @Size(min = 1, max = 40)
+    @NotNull
+    private String firstname;
+    @Size(min = 1, max = 40)
+    @NotNull
+    private String surname;
     private Collection<RolesEntity> roles;
-    //No XmlElement
     private Collection<CompaniesEntity> companiesEntities;
 
-    @javax.persistence.Column(name = "username", nullable = false, insertable = true, updatable = true, length = 40, precision = 0)
+    @XmlElement
+    @javax.persistence.Column(name = "username", nullable = false, insertable = true, updatable = true, length = SecuritySettings.USERNAME_MAX, precision = 0)
     @Id
     public String getUsername() {
         return username;
@@ -44,7 +50,8 @@ public class UsersEntity {
         this.username = username;
     }
 
-    @javax.persistence.Column(name = "password", nullable = false, insertable = true, updatable = true, length = 100, precision = 0)
+    @XmlTransient
+    @javax.persistence.Column(name = "password", nullable = false, insertable = true, updatable = true, length = SecuritySettings.PASSWORDHASH_LEN, precision = 0)
     @Basic
     public String getPassword() {
         return password;
@@ -54,6 +61,29 @@ public class UsersEntity {
         this.password = password;
     }
 
+    @XmlElement
+    @javax.persistence.Column(name = "firstname", nullable = false, insertable = true, updatable = true, length = 40, precision = 0)
+    @Basic
+    public String getFirstname() {
+        return firstname;
+    }
+
+    public void setFirstname(String firstname) {
+        this.firstname = firstname;
+    }
+
+    @XmlElement
+    @javax.persistence.Column(name = "surname", nullable = false, insertable = true, updatable = true, length = 40, precision = 0)
+    @Basic
+    public String getSurname() {
+        return surname;
+    }
+
+    public void setSurname(String surname) {
+        this.surname = surname;
+    }
+
+    @XmlElement
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "rolePK.user")
     public Collection<RolesEntity> getRoles() {
         return roles;
@@ -71,6 +101,7 @@ public class UsersEntity {
     }
 
     //one or zero
+    @XmlTransient
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "user")
     public Collection<CompaniesEntity> getCompaniesEntities() {
         return companiesEntities;
@@ -80,6 +111,7 @@ public class UsersEntity {
         this.companiesEntities = companiesEntities;
     }
 
+    @XmlTransient
     @Transient
     public CompaniesEntity getCompany() {
         if(companiesEntities!=null && !companiesEntities.isEmpty()) {

@@ -30,7 +30,10 @@ import pl.bb.broker.brokerdb.broker.xml.ByteArrayAdapter;
 public class OffersEntity implements Serializable {
     private int id;
     @NotNull
-    @Size(min = 1, max = 400)
+    @Size(min = 1, max = 20)
+    private String facility;
+    @NotNull
+    @Size(min = 1)
     private String description;
     @NotNull
     private byte[] image;
@@ -41,7 +44,7 @@ public class OffersEntity implements Serializable {
     private Collection<OfferDetailsEntity> details;
 
     @XmlAttribute
-    @javax.persistence.Column(name = "id", nullable = false, insertable = true, updatable = true, length = 10, precision = 0)
+    @javax.persistence.Column(name = "id", nullable = false, insertable = true, updatable =false, length = 10, precision = 0)
     @Id
     @SequenceGenerator(name = "offers_id_seq", sequenceName = "offers_id_seq", allocationSize = 1)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "offers_id_seq")
@@ -55,7 +58,7 @@ public class OffersEntity implements Serializable {
 
     @XmlElement
     @NotNull
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.EAGER) //no cascade
     @JoinColumn(name = "company_id")
     public CompaniesEntity getCompany() {
         return company;
@@ -66,7 +69,18 @@ public class OffersEntity implements Serializable {
     }
 
     @XmlElement
-    @javax.persistence.Column(name = "description", nullable = true, insertable = true, updatable = true, length = 400, precision = 0)
+    @javax.persistence.Column(name = "facility", nullable = false, insertable = true, updatable = true, precision = 0)
+    @Basic
+    public String getFacility() {
+        return facility;
+    }
+
+    public void setFacility(String facility) {
+        this.facility = facility;
+    }
+
+    @XmlElement
+    @javax.persistence.Column(name = "description", nullable = false, insertable = true, updatable = true, precision = 0)
     @Basic
     public String getDescription() {
         return description;

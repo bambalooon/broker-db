@@ -18,25 +18,25 @@ import java.math.BigDecimal;
  * Time: 18:16
  * To change this template use File | Settings | File Templates.
  */
-@XmlRootElement
+@XmlRootElement(name = "detail")
 @javax.persistence.Table(name = "offerdetails", schema = "public", catalog = "broker")
 @Entity
 public class OfferDetailsEntity implements Serializable {
     @Embeddable
     public static class OfferDetailsPK implements Serializable {
-        @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+        @ManyToOne(fetch = FetchType.LAZY) //no cascade
         @JoinColumn(name = "offer_id")
         protected OffersEntity offer;
 
-        @javax.persistence.Column(name = "room", nullable = false, insertable = true, updatable = true, length = 20, precision = 0)
+        @javax.persistence.Column(name = "room_type", nullable = false, insertable = true, updatable = true, length = 20, precision = 0)
         @Basic
-        protected String room;
+        protected String room_type;
 
         public OfferDetailsPK() {}
 
-        public OfferDetailsPK(OffersEntity offer, String room) {
+        public OfferDetailsPK(OffersEntity offer, String room_type) {
             this.offer = offer;
-            this.room = room;
+            this.room_type = room_type;
         }
 
         @Override
@@ -50,7 +50,7 @@ public class OfferDetailsEntity implements Serializable {
                 return false;
             }
 
-            if(room != null ? room.equals(that.room) : that.room != null) {
+            if(room_type != null ? room_type.equals(that.room_type) : that.room_type != null) {
                 return false;
             }
 
@@ -59,7 +59,7 @@ public class OfferDetailsEntity implements Serializable {
 
         @Override
         public int hashCode() {
-            int result = room != null ? room.hashCode() : 0;
+            int result = room_type != null ? room_type.hashCode() : 0;
             result = 31 * result + (offer != null && offer.getDescription() != null ? offer.getDescription().hashCode() : 0);
             return result;
         }
@@ -67,6 +67,9 @@ public class OfferDetailsEntity implements Serializable {
     }
     @EmbeddedId
     private OfferDetailsPK offerDetailsPK = new OfferDetailsPK();
+    @Size(min = 1, max = 20)
+    @NotNull
+    private String room;
     @NotNull
     @DecimalMin(value = "0.00")
     private BigDecimal price;
@@ -92,13 +95,24 @@ public class OfferDetailsEntity implements Serializable {
 
     @XmlElement
     @NotNull
-    @Size(min = 1, max = 20)  //doesn't work?
+    @Size(min = 1, max = 20)
+    public String getRoomType() {
+        return offerDetailsPK.room_type;
+    }
+
+    public void setRoomType(String room_type) {
+        this.offerDetailsPK.room_type = room_type;
+    }
+
+    @XmlElement
+    @javax.persistence.Column(name = "room", nullable = false, insertable = true, updatable = true, length = 20, precision = 0)
+    @Basic
     public String getRoom() {
-        return offerDetailsPK.room;
+        return room;
     }
 
     public void setRoom(String room) {
-        this.offerDetailsPK.room = room;
+        this.room = room;
     }
 
     @XmlElement

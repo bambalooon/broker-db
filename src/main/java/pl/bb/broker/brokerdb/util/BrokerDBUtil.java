@@ -23,13 +23,15 @@ import java.util.List;
  */
 public class BrokerDBUtil implements BrokerDBOfferUtil, BrokerDBAuthUtil {
 
+    protected IHibernateUtil hibernateUtil = HibernateConfiguration.getSessionFactory();
+
     protected BrokerDBUtil() {} //protected - only utils can use it.
 
     public void saveUser(UsersEntity user) throws HibernateException {
         Session session = null;
         Transaction tx = null;
         try {
-            session = HibernateUtil.getSession();
+            session = hibernateUtil.getSession();
             tx = session.beginTransaction();
             UsersEntity checkUser = (UsersEntity) session.get(UsersEntity.class, user.getUsername());
             if(checkUser!=null) {
@@ -57,7 +59,7 @@ public class BrokerDBUtil implements BrokerDBOfferUtil, BrokerDBAuthUtil {
         Session session = null;
         Transaction tx = null;
         try {
-            session = HibernateUtil.getSession();
+            session = hibernateUtil.getSession();
             tx = session.beginTransaction();
             UsersEntity checkUser = (UsersEntity) session.get(UsersEntity.class, company.getUser().getUsername());
             if(checkUser!=null) {
@@ -85,7 +87,7 @@ public class BrokerDBUtil implements BrokerDBOfferUtil, BrokerDBAuthUtil {
         Session session = null;
         Transaction tx = null;
         try {
-            session = HibernateUtil.getSession();
+            session = hibernateUtil.getSession();
             tx = session.beginTransaction();
             session.save(offer);
             tx.commit();
@@ -106,7 +108,7 @@ public class BrokerDBUtil implements BrokerDBOfferUtil, BrokerDBAuthUtil {
         Transaction tx = null;
         CompaniesEntity company;
         try {
-            session = HibernateUtil.getSession();
+            session = hibernateUtil.getSession();
             tx = session.beginTransaction();
             List<CompaniesEntity> companies = session.createQuery("from CompaniesEntity where user.username = :username")
                     .setParameter("username", username).list();
@@ -134,7 +136,7 @@ public class BrokerDBUtil implements BrokerDBOfferUtil, BrokerDBAuthUtil {
         Transaction tx = null;
         OffersEntity offer;
         try {
-            session = HibernateUtil.getSession();
+            session = hibernateUtil.getSession();
             tx = session.beginTransaction();
             offer = (OffersEntity) session.get(OffersEntity.class, id);
             tx.commit();
@@ -156,7 +158,7 @@ public class BrokerDBUtil implements BrokerDBOfferUtil, BrokerDBAuthUtil {
         Transaction tx = null;
         List<OffersEntity> offers = null;
         try {
-            session = HibernateUtil.getSession();
+            session = hibernateUtil.getSession();
             tx = session.beginTransaction();
             offers = session.createQuery("FROM OffersEntity").list();
             tx.commit();
@@ -177,7 +179,7 @@ public class BrokerDBUtil implements BrokerDBOfferUtil, BrokerDBAuthUtil {
         Session session = null;
         Transaction tx = null;
         try {
-            session = HibernateUtil.getSession();
+            session = hibernateUtil.getSession();
             tx = session.beginTransaction();
             UsersEntity checkUser = (UsersEntity) session.get(UsersEntity.class, username);
             tx.commit();

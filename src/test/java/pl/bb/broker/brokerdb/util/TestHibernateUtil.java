@@ -7,34 +7,29 @@ import org.hibernate.boot.registry.StandardServiceRegistry;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
 
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
-
 /**
  * Created with IntelliJ IDEA.
  * User: BamBalooon
- * Date: 25.05.14
- * Time: 01:46
+ * Date: 30.05.14
+ * Time: 13:13
  * To change this template use File | Settings | File Templates.
  */
-public class HibernateUtil implements IHibernateUtil {
-    private static HibernateUtil instance;
+public class TestHibernateUtil implements IHibernateUtil {
+    private static TestHibernateUtil instance;
 
-    public static HibernateUtil getInstance() {
+    public static TestHibernateUtil getInstance() {
         if(instance==null) {
-            instance = new HibernateUtil();
+            instance = new TestHibernateUtil();
         }
         return instance;
     }
 
     private final SessionFactory SESSION_FACTORY;
 
-
     {
         try {
             Configuration conf = new Configuration();
-            conf.configure();
+            conf.configure("hibernate-test.cfg.xml");
 
             StandardServiceRegistryBuilder sb = new StandardServiceRegistryBuilder();
             sb.applySettings(conf.getProperties());
