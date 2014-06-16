@@ -8,10 +8,18 @@
     <property name="connection.driver_class">org.postgresql.Driver</property>
     <property name="connection.username">broker</property>
     <property name="connection.password">broker</property>
-    <mapping class="pl.bb.broker.brokerdb.broker.entities.RolesEntity"/>
+    <property name="show_sql">true</property>
+    <property name="format_sql">true</property>
+    <property name="use_sql_comments">true</property>
+      <mapping class="pl.bb.broker.brokerdb.broker.entities.RolesEntity"/>
     <mapping class="pl.bb.broker.brokerdb.broker.entities.UsersEntity"/>
     <mapping class="pl.bb.broker.brokerdb.broker.entities.CompaniesEntity"/>
     <mapping class="pl.bb.broker.brokerdb.broker.entities.OffersEntity"/>
     <mapping class="pl.bb.broker.brokerdb.broker.entities.OfferDetailsEntity"/>
+    <mapping class="pl.bb.broker.brokerdb.broker.entities.ReservationsEntity"/>
+      <mapping class="pl.bb.broker.brokerdb.broker.entities.InvoicesEntity"/>
+      <mapping class="pl.bb.broker.brokerdb.broker.entities.PaymentsEntity"/>
+      <mapping class="pl.bb.broker.brokerdb.broker.entities.ServicesEntity"/>
+      <mapping class="pl.bb.broker.brokerdb.broker.entities.FavoritesEntity"/>
   </session-factory>
 </hibernate-configuration>

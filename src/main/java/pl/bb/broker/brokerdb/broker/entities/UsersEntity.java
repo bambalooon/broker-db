@@ -9,6 +9,8 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 import java.util.ArrayList;
 import java.util.Collection;
+
+import org.hibernate.annotations.Cascade;
 import pl.bb.broker.security.settings.SecuritySettings;
 
 /**
@@ -36,8 +38,13 @@ public class UsersEntity {
     @Size(min = 1, max = 40)
     @NotNull
     private String surname;
+    @NotNull
+    private boolean activated;
+
     private Collection<RolesEntity> roles;
-    private Collection<CompaniesEntity> companiesEntities;
+    private Collection<CompaniesEntity> companies;
+    private Collection<ReservationsEntity> reservations;
+    private Collection<FavoritesEntity> favorites;
 
     @XmlElement
     @javax.persistence.Column(name = "username", nullable = false, insertable = true, updatable = true, length = SecuritySettings.USERNAME_MAX, precision = 0)
@@ -84,6 +91,18 @@ public class UsersEntity {
     }
 
     @XmlElement
+    @javax.persistence.Column(name = "activated", nullable = false, insertable = true, updatable = true)
+    @Basic
+    public boolean isActivated() {
+        return activated;
+    }
+
+    public void setActivated(boolean activated) {
+        this.activated = activated;
+    }
+
+
+    @XmlElement
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "rolePK.user")
     public Collection<RolesEntity> getRoles() {
         return roles;
@@ -103,29 +122,49 @@ public class UsersEntity {
     //one or zero
     @XmlTransient
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "user")
-    public Collection<CompaniesEntity> getCompaniesEntities() {
-        return companiesEntities;
+    public Collection<CompaniesEntity> getCompanies() {
+        return companies;
     }
 
-    public void setCompaniesEntities(Collection<CompaniesEntity> companiesEntities) {
-        this.companiesEntities = companiesEntities;
+    public void setCompanies(Collection<CompaniesEntity> companies) {
+        this.companies = companies;
     }
 
     @XmlTransient
     @Transient
     public CompaniesEntity getCompany() {
-        if(companiesEntities!=null && !companiesEntities.isEmpty()) {
-            return ((ArrayList<CompaniesEntity>) companiesEntities).get(0);
+        if(companies!=null && !companies.isEmpty()) {
+            return ((ArrayList<CompaniesEntity>) companies).get(0);
         }
         return null;
     }
 
     public void setCompany(CompaniesEntity company) {
-        if(companiesEntities==null) {
-            companiesEntities = new ArrayList<CompaniesEntity>();
+        if(companies==null) {
+            companies = new ArrayList<CompaniesEntity>();
         }
-        companiesEntities.clear();
-        companiesEntities.add(company);
+        companies.clear();
+        companies.add(company);
+    }
+
+    @XmlTransient
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "user")
+    public Collection<ReservationsEntity> getReservations() {
+        return reservations;
+    }
+
+    public void setReservations(Collection<ReservationsEntity> reservations) {
+        this.reservations = reservations;
+    }
+
+    @XmlTransient
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "favPK.user")
+    public Collection<FavoritesEntity> getFavorites() {
+        return favorites;
+    }
+
+    public void setFavorites(Collection<FavoritesEntity> favorites) {
+        this.favorites = favorites;
     }
 
 

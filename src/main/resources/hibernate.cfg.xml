@@ -11,5 +11,10 @@
     <mapping class="pl.bb.broker.brokerdb.broker.entities.CompaniesEntity"/>
     <mapping class="pl.bb.broker.brokerdb.broker.entities.OffersEntity"/>
     <mapping class="pl.bb.broker.brokerdb.broker.entities.OfferDetailsEntity"/>
+    <mapping class="pl.bb.broker.brokerdb.broker.entities.ReservationsEntity"/>
+    <mapping class="pl.bb.broker.brokerdb.broker.entities.InvoicesEntity"/>
+    <mapping class="pl.bb.broker.brokerdb.broker.entities.PaymentsEntity"/>
+    <mapping class="pl.bb.broker.brokerdb.broker.entities.ServicesEntity"/>
+    <mapping class="pl.bb.broker.brokerdb.broker.entities.FavoritesEntity"/>
   </session-factory>
 </hibernate-configuration>

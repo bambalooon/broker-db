@@ -1,11 +1,9 @@
 package pl.bb.broker.brokerdb.broker.xml;
 
+import org.codehaus.jackson.map.annotate.JsonSerialize;
 import pl.bb.broker.brokerdb.broker.entities.OffersEntity;
 
-import javax.xml.bind.annotation.XmlAnyElement;
-import javax.xml.bind.annotation.XmlMixed;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlSeeAlso;
+import javax.xml.bind.annotation.*;
 import java.util.List;
 
 /**
@@ -18,6 +16,7 @@ import java.util.List;
 
 @XmlRootElement(name = "list")
 @XmlSeeAlso(OffersEntity.class)
+@JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
 public class XmlCollectionWrapper<T> {
     protected List<T> items;
 

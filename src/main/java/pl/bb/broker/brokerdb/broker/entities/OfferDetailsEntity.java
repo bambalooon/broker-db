@@ -10,6 +10,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.Collection;
 
 /**
  * Created with IntelliJ IDEA.
@@ -65,6 +66,7 @@ public class OfferDetailsEntity implements Serializable {
         }
 
     }
+
     @EmbeddedId
     private OfferDetailsPK offerDetailsPK = new OfferDetailsPK();
     @Size(min = 1, max = 20)
@@ -73,6 +75,13 @@ public class OfferDetailsEntity implements Serializable {
     @NotNull
     @DecimalMin(value = "0.00")
     private BigDecimal price;
+
+    @OneToMany(fetch = FetchType.LAZY)
+    @JoinColumns({
+            @JoinColumn(name = "offer", referencedColumnName = "offer_id"),
+            @JoinColumn(name = "room", referencedColumnName = "room_type")
+    })
+    private Collection<ReservationsEntity> reservations;
 
     @XmlTransient
     public OfferDetailsPK getOfferDetailsPK() {
@@ -124,6 +133,15 @@ public class OfferDetailsEntity implements Serializable {
 
     public void setPrice(BigDecimal price) {
         this.price = price;
+    }
+
+    @XmlTransient
+    public Collection<ReservationsEntity> getReservations() {
+        return reservations;
+    }
+
+    public void setReservations(Collection<ReservationsEntity> reservations) {
+        this.reservations = reservations;
     }
 
     @Override

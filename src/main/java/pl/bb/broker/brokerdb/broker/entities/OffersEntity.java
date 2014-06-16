@@ -12,9 +12,12 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.io.Serializable;
+import java.sql.Date;
+import java.sql.Timestamp;
 import java.util.Arrays;
 import java.util.Collection;
 import pl.bb.broker.brokerdb.broker.xml.ByteArrayAdapter;
+import pl.bb.broker.brokerdb.broker.xml.SqlDateAdapter;
 
 /**
  * Created with IntelliJ IDEA.
@@ -40,8 +43,12 @@ public class OffersEntity implements Serializable {
     @NotNull
     @Size(min = 1, max = 40)
     private String city;
+    @NotNull
+    private Date posted;
+    private Date withdraw;
     private CompaniesEntity company;
     private Collection<OfferDetailsEntity> details;
+    private Collection<ReservationsEntity> reservations;
 
     @XmlAttribute
     @javax.persistence.Column(name = "id", nullable = false, insertable = true, updatable =false, length = 10, precision = 0)
@@ -114,6 +121,30 @@ public class OffersEntity implements Serializable {
         this.city = city;
     }
 
+    @XmlElement
+    @XmlJavaTypeAdapter(value = SqlDateAdapter.class)
+    @javax.persistence.Column(name = "posted", nullable = false, insertable = true, updatable = true, length = 40, precision = 0)
+    @Basic
+    public Date getPosted() {
+        return posted;
+    }
+
+    public void setPosted(Date posted) {
+        this.posted = posted;
+    }
+
+    @XmlElement
+    @XmlJavaTypeAdapter(value = SqlDateAdapter.class)
+    @javax.persistence.Column(name = "withdraw", nullable = true, insertable = true, updatable = true, length = 40, precision = 0)
+    @Basic
+    public Date getWithdraw() {
+        return withdraw;
+    }
+
+    public void setWithdraw(Date withdraw) {
+        this.withdraw = withdraw;
+    }
+
     @XmlElement(name = "detail")
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "offerDetailsPK.offer")
     public Collection<OfferDetailsEntity> getDetails() {
@@ -122,6 +153,16 @@ public class OffersEntity implements Serializable {
 
     public void setDetails(Collection<OfferDetailsEntity> details) {
         this.details = details;
+    }
+
+    @XmlTransient
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "offer")
+    public Collection<ReservationsEntity> getReservations() {
+        return reservations;
+    }
+
+    public void setReservations(Collection<ReservationsEntity> reservations) {
+        this.reservations = reservations;
     }
 
     @Override

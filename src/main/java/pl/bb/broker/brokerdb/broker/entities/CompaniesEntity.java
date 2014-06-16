@@ -1,7 +1,10 @@
 package pl.bb.broker.brokerdb.broker.entities;
 
+import org.hibernate.validator.constraints.Email;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -26,6 +29,12 @@ public class CompaniesEntity {
     private String companyname;
     private String address;
     private String phone;
+    @Size(max = 100)
+    private String resources;
+    @NotNull
+    @Email
+    @Size(max = 100)
+    private String email;
     private Collection<OffersEntity> offers;
 
     @XmlAttribute
@@ -86,6 +95,28 @@ public class CompaniesEntity {
         this.phone = phone;
     }
 
+    @XmlElement
+    @javax.persistence.Column(name = "resources", nullable = true, insertable = true, updatable = true, length = 100, precision = 0)
+    @Basic
+    public String getResources() {
+        return resources;
+    }
+
+    public void setResources(String resources) {
+        this.resources = resources;
+    }
+
+    @XmlElement
+    @javax.persistence.Column(name = "email", nullable = false, insertable = true, updatable = true, length = 100, precision = 0)
+    @Basic
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
     @XmlTransient //i don't want to :(
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "company")
     public Collection<OffersEntity> getOffers() {
@@ -108,6 +139,8 @@ public class CompaniesEntity {
         if (address != null ? !address.equals(that.address) : that.address != null) return false;
         if (companyname != null ? !companyname.equals(that.companyname) : that.companyname != null) return false;
         if (phone != null ? !phone.equals(that.phone) : that.phone != null) return false;
+        if (email != null ? email.equals(that.email) : that.email != null) return false;
+        if (resources != null ? resources.equals(that.resources) : that.resources != null) return false;
 
         return true;
     }
@@ -119,6 +152,8 @@ public class CompaniesEntity {
         result = 31 * result + (companyname != null ? companyname.hashCode() : 0);
         result = 31 * result + (address != null ? address.hashCode() : 0);
         result = 31 * result + (phone != null ? phone.hashCode() : 0);
+        result = 31 * result + (resources != null ? resources.hashCode() : 0);
+        result = 31 * result + (email != null ? email.hashCode() : 0);
         return result;
     }
 

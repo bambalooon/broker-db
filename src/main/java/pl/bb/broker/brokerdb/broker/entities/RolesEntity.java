@@ -59,9 +59,11 @@ public class RolesEntity {
         }
 
     }
+
     @EmbeddedId
     private RolePK rolePK = new RolePK();
 
+    @XmlTransient
     public RolePK getRolePK() {
         return rolePK;
     }

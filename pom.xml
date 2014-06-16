@@ -16,8 +16,10 @@
         <maven-install.version>2.4</maven-install.version>
         <hibernate.version>4.3.5.Final</hibernate.version>
         <hibernate-validator.version>5.1.1.Final</hibernate-validator.version>
+        <mail.version>1.5.0-b01</mail.version>
         <broker-db.version>1.0</broker-db.version>
         <broker-auth.version>1.0</broker-auth.version>
+        <jersey.version>1.8</jersey.version>
     </properties>
 
     <dependencies>
@@ -25,6 +27,19 @@
             <groupId>pl.bb.broker</groupId>
             <artifactId>broker-authentication</artifactId>
             <version>${broker-auth.version}</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>com.sun.jersey</groupId>
+            <artifactId>jersey-json</artifactId>
+            <version>${jersey.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>javax.mail</groupId>
+            <artifactId>mail</artifactId>
+            <version>${mail.version}</version>
             <scope>provided</scope>
         </dependency>
 
